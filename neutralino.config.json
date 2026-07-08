@@ -1,0 +1,20 @@
+{
+    "applicationId": "js.orion.editor",
+    "version": "1.0.0",
+    "defaultMode": "window",
+    "url": "/editor/index.html",
+    "enableInspector": true,
+    "windowOptions": {
+        "title": "Orion Editor",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "borderless": true
+    },
+    "cli": {
+        "binaryName": "orion",
+        "resourcesPath": "/editor/",
+        "clientLibrary": "/editor/js/neutralino.js"
+    }
+}

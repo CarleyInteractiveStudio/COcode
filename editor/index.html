@@ -8,52 +8,45 @@
     <link rel="stylesheet" href="css/syntax.css">
 </head>
 <body class="theme-dark-purple">
-    <header class="top-bar">
-        <div class="menu-item">Archivo</div>
+    <header class="top-bar" id="draggable-region">
+        <div class="menu-item" onclick="openFile()">Archivo</div>
         <div class="menu-item">Editar</div>
-        <div class="menu-item">Configuración</div>
+        <div class="menu-item" onclick="showConfig()">Configuración</div>
         <div class="window-controls">
-            <span class="control-btn minimize"></span>
-            <span class="control-btn maximize"></span>
-            <span class="control-btn close"></span>
+            <span class="control-btn minimize" onclick="Neutralino.window.minimize()"></span>
+            <span class="control-btn close" onclick="Neutralino.app.exit()"></span>
         </div>
     </header>
-
     <main class="editor-container">
-        <aside class="file-explorer" id="file-explorer">
+        <aside class="file-explorer">
             <div class="panel-header">EXPLORADOR</div>
-            <div class="file-list">
-                <!-- Archivos se cargarán aquí -->
-            </div>
+            <div class="file-list" id="explorer-list"></div>
         </aside>
-
         <section class="main-workspace">
             <div id="window-system-container" class="window-system">
-                <!-- Aquí vivirán las "mini-ventanas" -->
                 <div class="mini-window" id="editor-window">
                     <div class="window-header">
-                        <span class="window-title">main.js</span>
+                        <span class="window-title" id="current-file-name">nuevo.orion</span>
                         <div class="window-actions">
-                            <button class="win-btn close-win">×</button>
+                            <button class="win-btn" onclick="saveCurrentFile()">💾</button>
+                            <button class="win-btn">×</button>
                         </div>
                     </div>
-                    <div class="window-content">
-                        <div id="code-editor" contenteditable="true" spellcheck="false"></div>
-                    </div>
+                    <div class="window-content"><div id="code-editor" contenteditable="true" spellcheck="false"></div></div>
                 </div>
             </div>
         </section>
     </main>
-
     <footer class="bottom-bar">
         <div class="terminal-toggle">Terminal</div>
-        <div class="status-info">Orion v0.1</div>
+        <div class="status-info">Orion v0.2 [Neutralino]</div>
     </footer>
-
+    <script src="js/neutralino.js"></script>
     <script src="js/windows.js"></script>
     <script src="js/themes.js"></script>
     <script src="js/editor.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
+    <script>Neutralino.init();</script>
 </body>
 </html>

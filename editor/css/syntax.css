@@ -1,26 +1,5 @@
-/* Syntax Highlighting */
 .keyword { color: #ff79c6; font-weight: bold; }
 .string { color: #f1fa8c; }
 .number { color: #bd93f9; }
 .comment { color: #6272a4; font-style: italic; }
-.type { color: #8be9fd; }
 .keyword.orion { color: #ffb86c; text-shadow: 0 0 5px #ffb86c; }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--accent-purple);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #6a4ecf;
-}
