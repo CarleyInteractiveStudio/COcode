@@ -1,0 +1,20 @@
+{
+  "name": "webn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "fs-extra": "^11.3.6",
+    "javascript-obfuscator": "^5.4.3"
+  },
+  "devDependencies": {
+    "electron-packager": "^17.1.2"
+  }
+}
