@@ -16,6 +16,18 @@ const COcodeSDK = {
         },
         async ping() {
             Neutralino.extensions.dispatch('js.cocode.hardware', 'ping');
+        },
+        async getCPU() {
+            return new Promise((resolve) => {
+                const handler = (data) => {
+                    if(data.detail.event === 'cpuInfo') {
+                        Neutralino.events.off('js.cocode.hardware', handler);
+                        resolve(data.detail.data);
+                    }
+                };
+                Neutralino.events.on('js.cocode.hardware', handler);
+                Neutralino.extensions.dispatch('js.cocode.hardware', 'getCPU');
+            });
         }
     }
 };
