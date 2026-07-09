@@ -13,8 +13,14 @@
         "borderless": true
     },
     "cli": {
-        "binaryName": "orion",
+        "binaryName": "cocode",
         "resourcesPath": "/editor/",
         "clientLibrary": "/editor/js/neutralino.js"
-    }
+    },
+    "extensions": [
+        {
+            "id": "js.cocode.hardware",
+            "command": "extensions/cocode-hardware/cocode-hardware-linux"
+        }
+    ]
 }
