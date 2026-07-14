@@ -7,49 +7,188 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/syntax.css">
 </head>
-<body class="theme-dark-purple">
+<body class="theme-dark">
+    <!-- Barra Superior -->
     <header class="top-bar" id="draggable-region">
-        <div class="menu-item" onclick="openFile()">Archivo</div>
-        <div class="menu-item">Editar</div>
-        <div class="menu-item" onclick="showPerformance()">Rendimiento</div>
-        <div class="menu-item" onclick="showConfig()">Configuración</div>
+        <div class="logo">COcode</div>
+        <nav class="menu-container">
+            <div class="menu-item" onclick="openFolderDialog()">Abrir Carpeta</div>
+            <div class="menu-item" onclick="openFileDialog()">Abrir Archivo</div>
+            <div class="menu-item" onclick="saveCurrentFile()">Guardar</div>
+            <div class="menu-item" onclick="showConfigModal()">Configuración</div>
+            <div class="menu-item" onclick="showLibrariesModal()">Librerías</div>
+            <div class="menu-item" style="color: var(--accent-light); font-weight: bold;" onclick="compileWithWebN()">Compilar WebN</div>
+            <div class="menu-item" style="color: #ff007f; font-weight: bold;" onclick="exportAsNativeApp()">Exportar App Nativa</div>
+        </nav>
         <div class="window-controls">
-            <span class="control-btn minimize" onclick="Neutralino.window.minimize()"></span>
-            <span class="control-btn close" onclick="Neutralino.app.exit()"></span>
+            <span class="control-btn minimize" onclick="Neutralino.window.minimize()" title="Minimizar"></span>
+            <span class="control-btn close" onclick="Neutralino.app.exit()" title="Cerrar"></span>
         </div>
     </header>
+
+    <!-- Contenedor Principal (VS Code Layout) -->
     <main class="editor-container">
+        <!-- Explorador Lateral Fijo -->
         <aside class="file-explorer">
-            <div class="panel-header">EXPLORADOR</div>
-            <div class="file-list" id="explorer-list"></div>
+            <div class="panel-header">
+                <span>EXPLORADOR</span>
+                <button class="btn" onclick="createNewFilePrompt()" title="Nuevo Archivo">+</button>
+            </div>
+            <div class="file-list" id="explorer-list">
+                <!-- Se cargará la jerarquía aquí de forma dinámica -->
+                <div style="padding: 16px; color: var(--text-muted); font-size: 12px; text-align: center;">
+                    No hay carpeta abierta. Haz clic en "Abrir Carpeta".
+                </div>
+            </div>
         </aside>
+
+        <!-- Área Central Workspace -->
         <section class="main-workspace">
-            <div id="window-system-container" class="window-system">
-                <div class="mini-window" id="editor-window">
-                    <div class="window-header">
-                        <span class="window-title" id="current-file-name">nuevo.orion</span>
-                        <div class="window-actions">
-                            <button class="win-btn" onclick="saveCurrentFile()">💾</button>
-                            <button class="win-btn">×</button>
+            <!-- Pestañas del Editor -->
+            <div class="tabs-container" id="editor-tabs">
+                <div class="tab active" id="tab-empty">
+                    <span>nuevo.html</span>
+                </div>
+            </div>
+
+            <!-- Contenedor del Editor de Código -->
+            <div class="editor-wrapper">
+                <div id="code-editor" contenteditable="true" spellcheck="false" oninput="updateHighlighting()"></div>
+            </div>
+
+            <!-- Panel Inferior (Terminal + Rendimiento integrados) -->
+            <div class="bottom-panel">
+                <div class="bottom-tabs">
+                    <div class="bottom-tab-btn active" onclick="switchBottomTab('terminal')">Terminal</div>
+                    <div class="bottom-tab-btn" onclick="switchBottomTab('performance')">Rendimiento C++</div>
+                </div>
+                <div class="bottom-content">
+                    <!-- Panel Terminal -->
+                    <div id="pane-terminal" class="bottom-pane active">
+                        <div class="terminal-container">
+                            <div id="terminal-out">
+                                <div>Bienvenido a la Terminal COcode. Ejecuta comandos directamente aquí.</div>
+                            </div>
+                            <div class="terminal-input-line">
+                                <span class="terminal-prompt">$</span>
+                                <input type="text" id="terminal-in" placeholder="Escribe un comando y presiona Enter..." autocomplete="off">
+                            </div>
                         </div>
                     </div>
-                    <div class="window-content"><div id="code-editor" contenteditable="true" spellcheck="false"></div></div>
+                    <!-- Panel Rendimiento -->
+                    <div id="pane-performance" class="bottom-pane">
+                        <div class="performance-grid">
+                            <div class="perf-card">
+                                <span class="perf-title">Núcleos CPU</span>
+                                <span class="perf-value" id="perf-cpu-cores">...</span>
+                            </div>
+                            <div class="perf-card">
+                                <span class="perf-title">Carga CPU</span>
+                                <span class="perf-value" id="perf-cpu-usage">0%</span>
+                                <div class="perf-bar-container">
+                                    <div class="perf-bar" id="perf-cpu-bar"></div>
+                                </div>
+                            </div>
+                            <div class="perf-card">
+                                <span class="perf-title">Memoria Total</span>
+                                <span class="perf-value" id="perf-ram-total">...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Barra de Estado Inferior -->
     <footer class="bottom-bar">
-        <div class="terminal-toggle">Terminal</div>
-        <div class="status-info">COcode v0.2 [Neutralino]</div>
+        <div id="status-left">Listo</div>
+        <div class="status-info">
+            <span id="current-theme-label">Tema: Oscuro</span>
+            <span>|</span>
+            <span>COcode v0.2 [Neutralino]</span>
+        </div>
     </footer>
+
+    <!-- Modal de Configuración / Temas -->
+    <div class="modal-overlay" id="modal-config">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Configuración del Editor</span>
+                <button class="modal-close" onclick="closeModal('modal-config')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Tema Visual</label>
+                    <select class="form-control" id="theme-select" onchange="changeTheme(this.value)">
+                        <option value="dark">Oscuro Elegante (Purple Navy)</option>
+                        <option value="light">Claro Minimalista (Soft White)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 24px; display: flex; gap: 8px; justify-content: flex-end;">
+                    <button class="btn-primary" onclick="closeModal('modal-config')">Guardar y Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Librerías -->
+    <div class="modal-overlay" id="modal-libraries">
+        <div class="modal-content" style="width: 520px;">
+            <div class="modal-header">
+                <span class="modal-title">Gestión de Librerías Web</span>
+                <button class="modal-close" onclick="closeModal('modal-libraries')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+                    Escribe el nombre de un paquete npm o URL de un CDN para descargarlo directamente en tu proyecto.
+                </p>
+                <div class="form-group">
+                    <label class="form-label">Descargar Librería Custom</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" class="form-control" id="lib-input" placeholder="Ej: lodash, axios, o url completa">
+                        <button class="btn-primary" onclick="downloadCustomLibrary()">Descargar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Librerías Populares Recomendadas</label>
+                    <div class="library-chips">
+                        <span class="lib-chip" onclick="downloadPredefined('axios')">Axios</span>
+                        <span class="lib-chip" onclick="downloadPredefined('tailwind')">Tailwind CSS</span>
+                        <span class="lib-chip" onclick="downloadPredefined('font-awesome')">Font Awesome</span>
+                        <span class="lib-chip" onclick="downloadPredefined('chart.js')">Chart.js</span>
+                        <span class="lib-chip" onclick="downloadPredefined('lodash')">Lodash</span>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; font-size: 11px; color: var(--text-muted);">
+                    * Las librerías descargadas se guardarán en la carpeta <strong>/libs/</strong> de tu proyecto abierto.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor de Notificaciones Toast -->
+    <div class="toast-notification" id="toast-notif">
+        <span id="toast-message">Mensaje de notificación</span>
+    </div>
+
+    <!-- Librerías de neutralino y javascript del editor -->
     <script src="js/neutralino.js"></script>
-    <script src="js/windows.js"></script>
+    <script src="js/cocode_sdk.js"></script>
     <script src="js/themes.js"></script>
     <script src="js/editor.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/performance.js"></script>
-    <script src="js/cocode_sdk.js"></script>
+    <script src="js/libraries.js"></script>
+    <script src="js/compilation.js"></script>
     <script src="js/main.js"></script>
-    <script>Neutralino.init();</script>
+    <script>
+        // Inicializar Neutralino si está disponible en modo app nativa
+        try {
+            Neutralino.init();
+        } catch(e) {
+            console.log("Iniciando en modo web o fuera del entorno nativo");
+        }
+    </script>
 </body>
 </html>
