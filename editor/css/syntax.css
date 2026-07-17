@@ -1,0 +1,5 @@
+.keyword { color: #ff79c6; font-weight: bold; }
+.string { color: #f1fa8c; }
+.number { color: #bd93f9; }
+.comment { color: #6272a4; font-style: italic; }
+.keyword.orion { color: #ffb86c; text-shadow: 0 0 5px #ffb86c; }

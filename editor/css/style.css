@@ -1,0 +1,15 @@
+:root { --bg-dark: #1a1a2e; --accent-purple: #4e31aa; --text-color: #e2e2e2; --header-bg: #0f3460; --sidebar-bg: #1a1a2e; --window-bg: #16213e; }
+body { font-family: sans-serif; background: var(--bg-dark); color: var(--text-color); height: 100vh; display: flex; flex-direction: column; overflow: hidden; margin: 0; }
+.top-bar { height: 35px; background: var(--header-bg); display: flex; align-items: center; padding: 0 10px; border-bottom: 1px solid #333; }
+.menu-item { padding: 0 12px; cursor: pointer; }
+.window-controls { margin-left: auto; display: flex; gap: 8px; }
+.control-btn { width: 12px; height: 12px; border-radius: 50%; }
+.close { background: #ff5f56; } .minimize { background: #ffbd2e; }
+.editor-container { flex: 1; display: flex; }
+.file-explorer { width: 200px; background: var(--sidebar-bg); border-right: 1px solid #333; }
+.main-workspace { flex: 1; position: relative; background: #0f0f1a; }
+.mini-window { position: absolute; width: 600px; height: 400px; background: var(--window-bg); border: 1px solid var(--accent-purple); border-radius: 8px; display: flex; flex-direction: column; top: 50px; left: 50px; }
+.window-header { height: 30px; background: var(--accent-purple); display: flex; align-items: center; padding: 0 10px; cursor: move; }
+.window-content { flex: 1; padding: 10px; }
+#code-editor { height: 100%; outline: none; white-space: pre; font-family: monospace; }
+.bottom-bar { height: 25px; background: var(--accent-purple); display: flex; align-items: center; padding: 0 10px; font-size: 12px; }
